@@ -1,0 +1,41 @@
+# =========================
+# File di configurazione Git
+# =========================
+
+# Variabili d'ambiente e segreti (CRITICO!)
+.env
+.env.local
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Ambienti Virtuali Python
+venv/
+.venv/
+env/
+
+# Next.js / Node.js (Ci serviranno dopo per il frontend)
+node_modules/
+.next/
+out/
+build/
+npm-debug.log
+yarn-error.log
+yarn.lock
+package-lock.json
+
+# Database Vettoriale (Ignoriamo i dati locali del DB che creeremo)
+chroma_db/
+vector_store/
+
+# macOS
+.DS_Store
+
+# IDE / Editor (VSCode, PyCharm, ecc.)
+.vscode/
+.idea/
+*.swp
