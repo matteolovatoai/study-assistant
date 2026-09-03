@@ -21,3 +21,7 @@ def generate_ai_response(prompt: str) -> str:
 def chunk_text(text: str, chunk_size: int = 1000) -> list[str]:
     """crea chunk fissi e ne ritorna una lista"""
     return [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
+
+
+def store_chunks(chunks: list[str]):
+    pass
