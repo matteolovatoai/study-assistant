@@ -14,10 +14,5 @@ def generate_ai_response(prompt: str) -> str:
 
 
 def chunk_text(text: str, chunk_size: int = 1000) -> list[str]:
-    chunks: list[str] = []
-    current_token: int = 0
-    while current_token < len(text) - chunk_size:
-        chunks.append(text[current_token : current_token + chunk_size])
-        current_token += chunk_size
-    chunks.append(text[current_token:])
-    return chunks
+    """crea chunk fissi e ne ritorna una lista"""
+    return [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
