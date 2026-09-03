@@ -8,7 +8,7 @@ client = genai.Client()
 
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
 
-documents = chroma_client.get_or_create_collection(name="documenti")
+collection = chroma_client.get_or_create_collection(name="documenti")
 
 
 def generate_ai_response(prompt: str) -> str:
