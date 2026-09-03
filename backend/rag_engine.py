@@ -11,3 +11,7 @@ def generate_ai_response(prompt: str) -> str:
         model="gemini-3.5-flash-lite", contents=prompt
     )
     return response.text or "Errore: Il modello non ha generato una risposta."
+
+
+def chunk_text(text: str, chunk_size: int = 1000) -> list[str]:
+    return [""]
