@@ -8,8 +8,9 @@ Il progetto è un sistema RAG (Retrieval-Augmented Generation) locale e modulare
 - **Linguaggio:** Python 3.12+
 - **Framework Web:** FastAPI (basato su Starlette e Pydantic).
 - **Tool di Testing:** Pytest
-- **Integrazione AI:** `google-genai` SDK (usando il modello `gemini-3.5-flash-lite` per massima velocità e minor costo).
-- **Database Vettoriale:** ChromaDB (modalità in-memory/locale).
+- **Integrazione AI (Generazione Testo):** `google-genai` SDK (usando il modello `gemini-3.5-flash-lite` per massima velocità e minor costo).
+- **Database Vettoriale:** ChromaDB (modalità in-memory persistente su disco).
+- **Integrazione AI (Embeddings):** Funzione integrata in ChromaDB `GoogleGeminiEmbeddingFunction` (utilizzando il modello `gemini-embedding-001`).
 
 ### Frontend (Prossimo Sprint)
 - **Framework:** Next.js (React)
@@ -20,4 +21,4 @@ Il progetto è un sistema RAG (Retrieval-Augmented Generation) locale e modulare
 1. **Ingestione (Upload):**
    L'utente carica un file `.txt` -> Il Web Server (FastAPI) lo riceve -> Passa il testo a `rag_engine` -> Il testo viene diviso in Chunk -> I Chunk diventano Vettori salvati in ChromaDB.
 2. **Interrogazione (Chat):**
-   L'utente fa una domanda -> FastAPI riceve la domanda -> Il sistema cerca in ChromaDB il contesto più simile alla domanda -> Domanda + Contesto vengono inviati a Gemini API -> La risposta generata torna all'utente.
+   L'utente fa una domanda -> FastAPI riceve la domanda -> Il sistema cerca in ChromaDB i 2 contesti più simili alla domanda -> Domanda + Contesto vengono formattati in un super-prompt -> Inviati a Gemini API -> La risposta generata torna all'utente via HTTP.
