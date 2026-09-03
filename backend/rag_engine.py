@@ -1,5 +1,5 @@
 import chromadb
-from chromadb import Documents, EmbeddingFunction, Embeddings
+from chromadb.utils import embedding_functions
 from dotenv import load_dotenv
 from google import genai
 
@@ -9,29 +9,14 @@ client = genai.Client()
 
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
 
-
-class ModernGoogleEmbedding(EmbeddingFunction):
-    def __init__(self) -> None:
-        self.client = client
-
-    def __call__(self, input: Documents) -> Embeddings:
-        embeddings = []
-
-        # Iteriamo su ogni singolo documento (chunk) passato da ChromaDB
-        for testo in input:
-            response = self.client.models.embed_content(
-                model="gemini-embedding-2", contents=testo
-            )
-            # Estraiamo il vettore di questa specifica stringa
-            if response.embeddings and response.embeddings[0].values is not None:
-                embeddings.append(response.embeddings[0].values)
-
-        return embeddings
-
+google_ef = embedding_functions.GoogleGeminiEmbeddingFunction(
+    model_name="gemini-embedding-001",
+    task_type="RETRIEVAL_DOCUMENT",
+)
 
 collection = chroma_client.get_or_create_collection(
     name="documenti",
-    embedding_function=ModernGoogleEmbedding(),  # type: ignore
+    embedding_function=google_ef,  # type: ignore
 )
 
 
