@@ -21,9 +21,36 @@ collection = chroma_client.get_or_create_collection(
 
 
 def generate_ai_response(prompt: str) -> str:
-    response = client.models.generate_content(
-        model="gemini-3.5-flash-lite", contents=prompt
+    # 1. Cerchiamo nel database i pezzetti di documento relativi alla domanda
+    risultati = collection.query(
+        query_texts=[prompt],
+        n_results=2,  # Prendiamo i 2 frammenti più rilevanti
     )
+
+    # 2. Estraiamo il testo (aggiungendo il nostro type narrowing per sicurezza)
+    assert risultati["documents"] is not None
+    documenti_trovati = risultati["documents"][0]
+
+    # 3. Uniamo i frammenti trovati in un unico grande testo
+    contesto = "\n".join(documenti_trovati)
+
+    # 4. Creiamo il super-prompt (RAG = Retrieval-Augmented Generation)
+    prompt_aumentato = f"""
+        Sei un assistente allo studio. Rispondi alla domanda dell'utente
+        basandoti SOLO sul seguente contesto.
+        Se la risposta non è nel contesto, di' che non lo sai.
+
+        CONTESTO:
+        {contesto}
+
+        DOMANDA: {prompt}
+        """
+
+    # 5. Mandiamo il super-prompt a Gemini
+    response = client.models.generate_content(
+        model="gemini-3.5-flash-lite", contents=prompt_aumentato
+    )
+
     return response.text or "Errore: Il modello non ha generato una risposta."
 
 
