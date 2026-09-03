@@ -23,3 +23,15 @@ def test_char_real():
     data = response.json()
     assert "reply" in data
     assert "pomodoro" in data["reply"].lower()
+
+
+def test_upload_document():
+    """Verifica che l'API riesca a ricevere e leggere un file di testo"""
+    file_content = b"Roma e' la capitale d'Italia."
+    files = {"file": ("documento.txt", file_content, "text/plain")}
+    response = client.post("/api/upload", files=files)
+    assert response.status_code == 200
+    data = response.json()
+    assert "filename" in data
+    assert data["filename"] == "documento.txt"
+    assert data["message"] == "File caricato con successo"
