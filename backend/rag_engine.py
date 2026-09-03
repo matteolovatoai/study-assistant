@@ -38,7 +38,7 @@ def generate_ai_response(prompt: str) -> str:
     prompt_aumentato = f"""
         Sei un assistente allo studio. Rispondi alla domanda dell'utente
         basandoti SOLO sul seguente contesto.
-        Se la risposta non è nel contesto, di' che non lo sai.
+        Se la risposta non è nel contesto, di' 'non lo so'.
 
         CONTESTO:
         {contesto}

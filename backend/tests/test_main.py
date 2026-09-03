@@ -14,15 +14,15 @@ def test_health_check():
     assert response.json() == {"status": "ok"}
 
 
-def test_char_real():
+def test_chat_real():
     """Verifica che l'API restituisca una risposta generata da Gemini."""
-    payload = {"message": "Rispondi solo con la parola 'Pomodoro'"}
+    payload = {"message": "Il pomodoro e' azzurro elettrico?"}
     response = client.post("/api/chat", json=payload)
 
     assert response.status_code == 200
     data = response.json()
     assert "reply" in data
-    assert "pomodoro" in data["reply"].lower()
+    assert "non lo so" in data["reply"].lower()
 
 
 def test_upload_document():
