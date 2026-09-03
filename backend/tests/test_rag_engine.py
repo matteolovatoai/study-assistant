@@ -54,7 +54,6 @@ def test_store_and_query_chunks():
     assert collection.count() == 3
 
     results = collection.query(query_texts="Di che colore e' il prato?", n_results=1)
-    print(results)
     assert results["documents"] is not None
     found_document = results["documents"][0][0]
     assert "erba" in found_document.lower()
