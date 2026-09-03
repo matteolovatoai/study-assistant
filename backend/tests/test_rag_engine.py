@@ -38,3 +38,23 @@ def test_chunk_text():
     assert isinstance(chunks, list)
     assert len(chunks) == 2
     assert len(chunks[0]) == 50
+
+
+def test_store_and_query_chunks():
+    """Verifica il salvataggio su chromaDB e la ricerca semantica"""
+    from rag_engine import collection, store_chunks
+
+    if collection.count() > 0:
+        collection.delete(collection.get()["ids"])
+
+    chunks = ["Il cielo è blu", "L'erba è verde", "Il sole è giallo"]
+
+    store_chunks(chunks)
+
+    assert collection.count() == 3
+
+    results = collection.query(query_texts="Di che colore e' il prato?", n_results=1)
+    print(results)
+    assert results["documents"] is not None
+    found_document = results["documents"][0][0]
+    assert "erba" in found_document.lower()
