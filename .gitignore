@@ -25,8 +25,6 @@ out/
 build/
 npm-debug.log
 yarn-error.log
-yarn.lock
-package-lock.json
 
 # Database Vettoriale (Ignoriamo i dati locali del DB che creeremo)
 chroma_db/
