@@ -16,7 +16,7 @@
 - [x] `rag_engine.py`: Inizializzazione di ChromaDB e salvataggio dei vettori (usando `GoogleGeminiEmbeddingFunction` e `gemini-embedding-001`).
 - [x] Modifica `/api/chat`: Cercare il contesto in ChromaDB prima di chiamare Gemini.
 
-## 🚧 Sprint 3: Interfaccia Utente (Next.js) - In Partenza
+## ✅ Sprint 3: Interfaccia Utente (Next.js)
 - [x] Inizializzazione progetto Next.js (separato dal backend).
 - [x] Creazione UI per la chat (gestione stato dei messaggi).
 - [x] Creazione UI per caricare un documento (`<input type="file">`).

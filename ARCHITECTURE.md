@@ -12,7 +12,7 @@ Il progetto è un sistema RAG (Retrieval-Augmented Generation) locale e modulare
 - **Database Vettoriale:** ChromaDB (modalità in-memory persistente su disco).
 - **Integrazione AI (Embeddings):** Funzione integrata in ChromaDB `GoogleGeminiEmbeddingFunction` (utilizzando il modello `gemini-embedding-001`).
 
-### Frontend (In corso)
+### Frontend (Completato V1)
 - **Framework:** Next.js (React) con App Router.
 - **Styling & UI:** Tailwind CSS + shadcn/ui.
 - **Comunicazione:** Chiamate REST HTTP standard (JSON) dirette al backend FastAPI.
