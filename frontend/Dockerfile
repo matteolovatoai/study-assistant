@@ -1,12 +1,13 @@
 # FASE 1: BUILD (Costruiamo l'app)
 # Usiamo Alpine Linux perché è leggerissimo e perfetto per Docker
-FROM node:20-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 
 # Copiamo prima solo i file delle dipendenze (stesso trucco della cache usato nel backend!)
 COPY package*.json ./
-# 'npm ci' è come 'npm install' ma molto più rigido e veloce in ambienti automatizzati
-RUN npm ci
+# Usiamo npm install invece di npm ci per evitare crash dovuti a differenze 
+# tra l'architettura del tuo Mac (Node 24) e quella del Raspberry (Alpine/ARM64)
+RUN npm install
 
 # Copiamo tutto il codice sorgente
 COPY . .
@@ -17,7 +18,7 @@ RUN npm run build
 
 # FASE 2: RUNNER (Ambiente di Produzione)
 # Ripartiamo da un'immagine pulita, scartando tutto il ciarpame (cache, file non necessari) della fase di build
-FROM node:20-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 
 # Diciamo a Node.js che siamo in produzione (attiva ottimizzazioni interne)
