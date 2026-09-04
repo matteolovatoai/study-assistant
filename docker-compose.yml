@@ -1,0 +1,42 @@
+services:
+  # ==========================================
+  # BACKEND (FastAPI + ChromaDB)
+  # ==========================================
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: study-assistant-backend
+    ports:
+      - "8000:8000"
+    # Passiamo le chiavi segrete leggendole dal file .env nella root o dall'ambiente
+    env_file:
+      - ./backend/.env
+    environment:
+      # Forza Python a non bufferizzare i log (utile per vedere i log su Docker in tempo reale)
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # MONTATURE (Persistenza dei dati)
+      # Mappiamo un volume logico di Docker alla cartella chroma_db interna.
+      # Se non lo facessimo, ogni volta che spegni il container, il RAG perderebbe la memoria!
+      - chroma_data:/app/chroma_db
+    restart: unless-stopped
+
+  # ==========================================
+  # FRONTEND (Next.js)
+  # ==========================================
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: study-assistant-frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+# Definiamo i volumi che Docker deve gestire permanentemente
+volumes:
+  chroma_data:
+    name: study_assistant_chroma_data

@@ -24,6 +24,6 @@
 - [x] Gestione del CORS in FastAPI per permettere le chiamate.
 
 ## 📅 Sprint 4: Dockerizzazione e Deployment (Raspberry Pi 5)
-- [ ] Creazione `Dockerfile` per backend e frontend.
-- [ ] Configurazione `docker-compose.yml`.
+- [x] Creazione `Dockerfile` per backend e frontend.
+- [x] Configurazione `docker-compose.yml`.
 - [ ] Regole di Traefik per il reverse proxy su Tailscale.
