@@ -26,4 +26,4 @@
 ## 📅 Sprint 4: Dockerizzazione e Deployment (Raspberry Pi 5)
 - [x] Creazione `Dockerfile` per backend e frontend.
 - [x] Configurazione `docker-compose.yml`.
-- [ ] Regole di Traefik per il reverse proxy su Tailscale.
+- [x] Regole di Traefik per il reverse proxy su Tailscale.

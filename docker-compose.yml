@@ -7,19 +7,20 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: study-assistant-backend
-    ports:
-      - "8000:8000"
-    # Passiamo le chiavi segrete leggendole dal file .env nella root o dall'ambiente
     env_file:
       - ./backend/.env
     environment:
-      # Forza Python a non bufferizzare i log (utile per vedere i log su Docker in tempo reale)
       - PYTHONUNBUFFERED=1
     volumes:
-      # MONTATURE (Persistenza dei dati)
-      # Mappiamo un volume logico di Docker alla cartella chroma_db interna.
-      # Se non lo facessimo, ogni volta che spegni il container, il RAG perderebbe la memoria!
       - chroma_data:/app/chroma_db
+    networks:
+      - proxy_network
+    labels:
+      - "traefik.enable=true"
+      # Rotta per il Backend: risponde sul tuo dominio Tailscale MA SOLO se l'URL inizia con /api
+      - "traefik.http.routers.backend.rule=Host(`iris.tailbd69cc.ts.net`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+      - "traefik.http.routers.backend.tls.certresolver=tsresolver"
     restart: unless-stopped
 
   # ==========================================
@@ -30,13 +31,24 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: study-assistant-frontend
-    ports:
-      - "3000:3000"
     depends_on:
       - backend
+    networks:
+      - proxy_network
+    labels:
+      - "traefik.enable=true"
+      # Rotta per il Frontend: risponde a tutto il resto sul tuo dominio
+      - "traefik.http.routers.frontend.rule=Host(`iris.tailbd69cc.ts.net`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=tsresolver"
     restart: unless-stopped
 
-# Definiamo i volumi che Docker deve gestire permanentemente
+# Diciamo a Docker Compose di non creare una nuova rete, ma di agganciarsi
+# a quella 'proxy_network' creata dal tuo Traefik globale!
+networks:
+  proxy_network:
+    external: true
+
 volumes:
   chroma_data:
     name: study_assistant_chroma_data

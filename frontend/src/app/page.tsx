@@ -33,7 +33,8 @@ export default function ChatPage() {
     setInputValue("");
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/chat", {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
+      const response = await fetch(`${apiUrl}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userText }),
@@ -63,8 +64,9 @@ export default function ChatPage() {
     formData.append("file", file);
 
     try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
       // Mandiamo il file al backend
-      const response = await fetch("http://127.0.0.1:8000/api/upload", {
+      const response = await fetch(`${apiUrl}/api/upload`, {
         method: "POST",
         // ATTENZIONE: Non impostare i Content-Type! 
         // Il browser lo calcola in automatico per FormData aggiungendo il "boundary" corretto
