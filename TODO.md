@@ -17,7 +17,7 @@
 - [x] Modifica `/api/chat`: Cercare il contesto in ChromaDB prima di chiamare Gemini.
 
 ## 🚧 Sprint 3: Interfaccia Utente (Next.js) - In Partenza
-- [ ] Inizializzazione progetto Next.js (separato dal backend).
+- [x] Inizializzazione progetto Next.js (separato dal backend).
 - [ ] Creazione UI per la chat (gestione stato dei messaggi).
 - [ ] Creazione UI per caricare un documento (`<input type="file">`).
 - [ ] Collegamento delle chiamate `fetch` tra Frontend e Backend.
