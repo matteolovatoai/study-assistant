@@ -1,3 +1,5 @@
+import uuid
+
 import chromadb
 from chromadb.utils import embedding_functions
 from dotenv import load_dotenv
@@ -59,7 +61,7 @@ def chunk_text(text: str, chunk_size: int = 1000) -> list[str]:
     return [text[i : i + chunk_size] for i in range(0, len(text), chunk_size)]
 
 
-def store_chunks(chunks: list[str]):
-    collection.add(
-        ids=[str(i) for i in range(len(chunks))], documents=[chunk for chunk in chunks]
-    )
+def store_chunks(chunks: list[str], filename: str = "doc"):
+    """Salva i chunk in ChromaDB con un ID univoco"""
+    ids = [f"{filename}_{uuid.uuid4()}" for _ in chunks]
+    collection.add(ids=ids, documents=chunks)

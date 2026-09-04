@@ -19,7 +19,7 @@
 ## 🚧 Sprint 3: Interfaccia Utente (Next.js) - In Partenza
 - [x] Inizializzazione progetto Next.js (separato dal backend).
 - [x] Creazione UI per la chat (gestione stato dei messaggi).
-- [ ] Creazione UI per caricare un documento (`<input type="file">`).
+- [x] Creazione UI per caricare un documento (`<input type="file">`).
 - [x] Collegamento delle chiamate `fetch` tra Frontend e Backend.
 - [x] Gestione del CORS in FastAPI per permettere le chiamate.
 
