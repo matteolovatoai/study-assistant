@@ -23,3 +23,8 @@ Il progetto è un sistema RAG (Retrieval-Augmented Generation) locale e modulare
    L'utente carica un file `.txt` -> Il Web Server (FastAPI) lo riceve -> Passa il testo a `rag_engine` -> Il testo viene diviso in Chunk -> I Chunk diventano Vettori salvati in ChromaDB.
 2. **Interrogazione (Chat):**
    L'utente fa una domanda -> FastAPI riceve la domanda -> Il sistema cerca in ChromaDB i 2 contesti più simili alla domanda -> Domanda + Contesto vengono formattati in un super-prompt -> Inviati a Gemini API -> La risposta generata torna all'utente via HTTP.
+
+## Deployment & Infrastruttura (Produzione)
+- **Containerizzazione:** Docker (Multi-stage build per Next.js, single-stage per Python ottimizzato).
+- **API Gateway & Routing:** Traefik v3 (con Docker Socket Auto-discovery e Zero Trust).
+- **Networking e Sicurezza HTTPS:** Tailscale + Traefik `tsresolver` (Connessione VPN Mesh e certificati TLS automatici).

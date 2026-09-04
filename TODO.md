@@ -23,7 +23,14 @@
 - [x] Collegamento delle chiamate `fetch` tra Frontend e Backend.
 - [x] Gestione del CORS in FastAPI per permettere le chiamate.
 
-## 📅 Sprint 4: Dockerizzazione e Deployment (Raspberry Pi 5)
-- [x] Creazione `Dockerfile` per backend e frontend.
-- [x] Configurazione `docker-compose.yml`.
-- [x] Regole di Traefik per il reverse proxy su Tailscale.
+## ✅ Sprint 4: Dockerizzazione e Deployment (Raspberry Pi 5)
+- [x] Creazione `Dockerfile` per backend e frontend (con fix node24).
+- [x] Configurazione `docker-compose.yml` (multi-stage per frontend).
+- [x] Regole di Traefik per il reverse proxy globale su Tailscale.
+- [x] Gestione intelligente delle Environment Variables (NEXT_PUBLIC_API_URL).
+
+## 📅 Sprint 5: Evoluzione MVP (Migliorie) - *Prossima Sessione*
+- [ ] Supporto all'upload di documenti complessi (PDF, Docx).
+- [ ] Cronologia Chat (memoria per domande "follow-up").
+- [ ] UI/UX: Loader (Spinner) mentre Gemini "sta pensando".
+- [ ] UI/UX: Supporto formattazione Markdown nelle risposte dell'AI.

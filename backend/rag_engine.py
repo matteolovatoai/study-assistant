@@ -4,6 +4,7 @@ import chromadb
 from chromadb.utils import embedding_functions
 from dotenv import load_dotenv
 from google import genai
+from google.genai import errors
 
 load_dotenv()
 
@@ -48,12 +49,15 @@ def generate_ai_response(prompt: str) -> str:
         DOMANDA: {prompt}
         """
 
-    # 5. Mandiamo il super-prompt a Gemini
-    response = client.models.generate_content(
-        model="gemini-3.5-flash-lite", contents=prompt_aumentato
-    )
-
-    return response.text or "Errore: Il modello non ha generato una risposta."
+    # 5. Mandiamo il super-prompt a Gemini e gestiamo eventuali crash di Google
+    try:
+        response = client.models.generate_content(
+            model="gemini-3.1-flash-lite", contents=prompt_aumentato
+        )
+        return response.text or "Errore: Il modello non ha generato una risposta."
+    except errors.APIError as e:
+        print(f"Errore Gemini API: {e}")
+        return "Scusa, in questo momento Gemini è a farsi un caffè nei datacenter di Google. Riprova tra un minuto!"
 
 
 def chunk_text(text: str, chunk_size: int = 1000) -> list[str]:
