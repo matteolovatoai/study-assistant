@@ -21,18 +21,46 @@ export default function ChatPage() {
   // Stato: memorizza il testo che l'utente sta digitando nell'input
   const [inputValue, setInputValue] = useState("");
 
-  const handleSendMessage = () => {
-    // Evitiamo di inviare messaggi vuoti
+  const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
 
+    const userText = inputValue;
+
     // 1. Aggiungiamo il messaggio dell'utente all'interfaccia
-    const newUserMessage: Message = { role: "user", content: inputValue };
+    const newUserMessage: Message = { role: "user", content: userText };
     setMessages((prev) => [...prev, newUserMessage]);
     
     // 2. Svuotiamo il campo di testo
     setInputValue("");
 
-    // TODO: (Prossimo step) Fare la chiamata al backend FastAPI per avere la risposta dell'AI
+    // 3. Facciamo la chiamata al backend FastAPI
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ message: userText }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Errore dal server FastAPI");
+      }
+
+      const data = await response.json();
+      
+      // 4. Aggiungiamo la vera risposta dell'AI
+      const aiMessage: Message = { role: "ai", content: data.reply };
+      setMessages((prev) => [...prev, aiMessage]);
+      
+    } catch (error) {
+      console.error("Errore fetch:", error);
+      const errorMessage: Message = { 
+        role: "ai", 
+        content: "⚠️ Si è verificato un errore di rete. Assicurati che FastAPI sia avviato." 
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    }
   };
 
   return (

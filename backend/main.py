@@ -1,10 +1,22 @@
 from typing import Annotated
 
 from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from rag_engine import generate_ai_response
 
 app = FastAPI(title="RAG Backend")
+
+# Abilitiamo CORS (Cross-Origin Resource Sharing)
+# Questo permette al frontend Next.js (che gira su localhost:3000)
+# di fare chiamate verso il backend (localhost:8000) senza essere bloccato dal browser.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # In produzione andrebbe limitato al dominio del frontend
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 # Definiamo la struttura dei dati in ingresso usando Pydantic.
