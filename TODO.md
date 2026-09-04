@@ -18,10 +18,10 @@
 
 ## 🚧 Sprint 3: Interfaccia Utente (Next.js) - In Partenza
 - [x] Inizializzazione progetto Next.js (separato dal backend).
-- [ ] Creazione UI per la chat (gestione stato dei messaggi).
+- [x] Creazione UI per la chat (gestione stato dei messaggi).
 - [ ] Creazione UI per caricare un documento (`<input type="file">`).
-- [ ] Collegamento delle chiamate `fetch` tra Frontend e Backend.
-- [ ] Gestione del CORS in FastAPI per permettere le chiamate.
+- [x] Collegamento delle chiamate `fetch` tra Frontend e Backend.
+- [x] Gestione del CORS in FastAPI per permettere le chiamate.
 
 ## 📅 Sprint 4: Dockerizzazione e Deployment (Raspberry Pi 5)
 - [ ] Creazione `Dockerfile` per backend e frontend.
