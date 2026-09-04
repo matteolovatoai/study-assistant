@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -21,6 +21,12 @@ export default function ChatPage() {
   
   // useRef ci permette di avere un "telecomando" per cliccare l'input nascosto
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null); // Aggiunto per lo scroll
+
+  // Scrolla in basso automaticamente ogni volta che cambia l'array messages
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
@@ -99,7 +105,7 @@ export default function ChatPage() {
         
         <CardContent className="flex flex-col flex-1 overflow-hidden p-4 bg-white rounded-b-xl">
           
-          <ScrollArea className="flex-1 pr-4 mb-4">
+          <ScrollArea className="flex-1 min-h-0 pr-4 mb-4">
             <div className="flex flex-col gap-4">
               {messages.map((msg, index) => (
                 <div 
@@ -113,6 +119,8 @@ export default function ChatPage() {
                   {msg.content}
                 </div>
               ))}
+              {/* Ancora invisibile su cui fare lo scroll */}
+              <div ref={messagesEndRef} />
             </div>
           </ScrollArea>
 
