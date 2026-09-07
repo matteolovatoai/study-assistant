@@ -29,7 +29,13 @@
 - [x] Regole di Traefik per il reverse proxy globale su Tailscale.
 - [x] Gestione intelligente delle Environment Variables (NEXT_PUBLIC_API_URL).
 
-## 📅 Sprint 5: Evoluzione MVP (Migliorie) - *Prossima Sessione*
+## 📅 Sprint 5: Refactoring e Stabilizzazione (Tech Debt) - *Sprint Attuale*
+- [ ] Inserimento di `pydantic-settings` per la gestione centralizzata della configurazione (rimozione variabili hardcoddate).
+- [ ] Refactoring di `rag_engine.py` e `main.py` per rimuovere lo stato globale (client ChromaDB e Gemini) e usare la Dependency Injection di FastAPI (`Depends`).
+- [ ] Riscrittura completa dei test in ottica E2E / Vertical Slicing, sfruttando i `dependency_overrides`.
+- [ ] Gestione centralizzata degli errori in FastAPI (Exception Handlers).
+
+## 📅 Sprint 6: Evoluzione MVP (Migliorie)
 - [ ] Supporto all'upload di documenti complessi (PDF, Docx).
 - [ ] Cronologia Chat (memoria per domande "follow-up").
 - [ ] UI/UX: Loader (Spinner) mentre Gemini "sta pensando".
