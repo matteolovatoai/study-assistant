@@ -34,6 +34,7 @@
 - [ ] Refactoring di `rag_engine.py` e `main.py` per rimuovere lo stato globale (client ChromaDB e Gemini) e usare la Dependency Injection di FastAPI (`Depends`).
 - [ ] Riscrittura completa dei test in ottica E2E / Vertical Slicing, sfruttando i `dependency_overrides`.
 - [ ] Gestione centralizzata degli errori in FastAPI (Exception Handlers).
+- [ ] **Infrastruttura**: Configurare Traefik nel `docker-compose.yml` per usare un sottodominio dedicato (es. `study.tuo-raspberry.ts.net`) in modo da ospitare futuri servizi.
 
 ## 📅 Sprint 6: Evoluzione MVP (Migliorie)
 - [ ] Supporto all'upload di documenti complessi (PDF, Docx).
