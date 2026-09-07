@@ -5,7 +5,7 @@
 - [x] Scrittura test TDD per endpoint base.
 - [x] Creazione `main.py` con FastAPI (endpoint `/health`, mock `/api/chat`).
 - [x] Test integrazione API di Google Gemini tramite `.env`.
-- [x] Creazione `rag_engine.py` e integrazione con il modello `gemini-3.5-flash-lite`.
+- [x] Creazione `rag_engine.py` e integrazione con il modello `gemini-3.1-flash-lite`.
 - [x] Collegamento finale tra `main.py` e `rag_engine.py`.
 
 ## ✅ Sprint 2: Database Vettoriale e RAG
