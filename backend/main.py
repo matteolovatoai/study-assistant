@@ -1,15 +1,14 @@
 from typing import Annotated
 
-from fastapi import FastAPI, File, UploadFile
+from config import Settings, get_settings
+from fastapi import Depends, FastAPI, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from rag_engine import chunk_text, generate_ai_response, store_chunks
+from rag_engine import RagEngine
 
 app = FastAPI(title="RAG Backend")
 
 # Abilitiamo CORS (Cross-Origin Resource Sharing)
-# Questo permette al frontend Next.js (che gira su localhost:3000)
-# di fare chiamate verso il backend (localhost:8000) senza essere bloccato dal browser.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # In produzione andrebbe limitato al dominio del frontend
@@ -19,7 +18,15 @@ app.add_middleware(
 )
 
 
-# Definiamo la struttura dei dati in ingresso usando Pydantic.
+from functools import lru_cache
+
+
+# Dipendenza per ottenere il motore RAG
+@lru_cache
+def get_rag_engine(settings: Annotated[Settings, Depends(get_settings)]) -> RagEngine:
+    return RagEngine(settings)
+
+
 class ChatRequest(BaseModel):
     message: str
 
@@ -30,22 +37,25 @@ def health_check():
 
 
 @app.post("/api/chat")
-def chat(request: ChatRequest):
-    response: str = generate_ai_response(request.message)
+def chat(request: ChatRequest, engine: Annotated[RagEngine, Depends(get_rag_engine)]):
+    response: str = engine.generate_ai_response(request.message)
     return {"reply": response}
 
 
 @app.post("/api/upload")
-async def upload(file: Annotated[UploadFile, File(...)]):
+async def upload(
+    file: Annotated[UploadFile, File(...)],
+    engine: Annotated[RagEngine, Depends(get_rag_engine)],
+):
     # 1. Leggiamo fisicamente il contenuto del file .txt
     content = await file.read()
     text = content.decode("utf-8")
 
     # 2. Lo spezzettiamo tramite la nostra funzione in rag_engine
-    chunks = chunk_text(text)
+    chunks = engine.chunk_text(text)
 
     # 3. Lo salviamo nel database ChromaDB!
-    store_chunks(chunks, file.filename or "sconosciuto")
+    engine.store_chunks(chunks, file.filename or "sconosciuto")
 
     return {
         "filename": file.filename,
