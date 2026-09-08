@@ -1,7 +1,4 @@
-from dotenv import load_dotenv
-
-# Carichiamo le variabili dal file .env prima di eseguire i test
-load_dotenv()
+# Le impostazioni vengono caricate automaticamente da pydantic-settings in config.py
 
 
 def test_chunk_text():

@@ -34,4 +34,4 @@ def test_upload_document():
     data = response.json()
     assert "filename" in data
     assert data["filename"] == "documento.txt"
-    assert data["message"] == "File caricato con successo"
+    assert data["message"] == "Caricati 1 frammenti nel RAG!"
