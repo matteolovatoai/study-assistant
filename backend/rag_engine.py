@@ -2,18 +2,23 @@ import uuid
 
 import chromadb
 from chromadb.utils import embedding_functions
-from dotenv import load_dotenv
+from config import get_settings
 from google import genai
 from google.genai import errors
 
-load_dotenv()
+settings = get_settings()
 
-client = genai.Client()
+client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
-chroma_client = chromadb.PersistentClient(path="./chroma_db")
+chroma_client = chromadb.PersistentClient(path=str(settings.CHROMA_DB_PATH))
+
+import os
+
+# ChromaDB legge la chiave ESCLUSIVAMENTE da os.environ, non accetta parametri diretti
+os.environ["GEMINI_API_KEY"] = settings.GEMINI_API_KEY
 
 google_ef = embedding_functions.GoogleGeminiEmbeddingFunction(
-    model_name="gemini-embedding-001",
+    model_name=settings.GEMINI_EMBEDDING_MODEL,
     task_type="RETRIEVAL_DOCUMENT",
 )
 
@@ -52,7 +57,7 @@ def generate_ai_response(prompt: str) -> str:
     # 5. Mandiamo il super-prompt a Gemini e gestiamo eventuali crash di Google
     try:
         response = client.models.generate_content(
-            model="gemini-3.1-flash-lite", contents=prompt_aumentato
+            model=settings.GEMINI_MODEL, contents=prompt_aumentato
         )
         return response.text or "Errore: Il modello non ha generato una risposta."
     except errors.APIError as e:
