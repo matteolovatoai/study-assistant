@@ -11,6 +11,7 @@ class Settings(BaseSettings):
     GEMINI_EMBEDDING_MODEL: str = "gemini-embedding-001"
 
     model_config = SettingsConfigDict(
+        frozen=True,
         env_file=".env",
         env_file_encoding="utf-8",
         extra="ignore",  # Ignora altre variabili d'ambiente non definite qui
