@@ -25,6 +25,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 # Copiamo dalla FASE 1 solo ciò che ci serve per far girare l'app
+COPY --from=builder /app/next.config.ts ./
 COPY --from=builder /app/package*.json ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.next ./.next
