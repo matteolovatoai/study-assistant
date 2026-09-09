@@ -1,10 +1,13 @@
 from typing import Annotated
 
 from config import Settings, get_settings
-from fastapi import Depends, FastAPI, File, UploadFile
+from fastapi import Depends, FastAPI, File, Request, UploadFile
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from rag_engine import RagEngine
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 app = FastAPI(title="RAG Backend")
 
@@ -16,6 +19,33 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(
+        status_code=422,
+        content={
+            "error": {
+                "type": "validation_error",
+                "message": "Dati della richiesta non validi",
+                "details": exc.errors(),
+            }
+        },
+    )
+
+
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "error": {
+                "type": "http_error",
+                "message": str(exc.detail),
+            }
+        },
+    )
 
 
 from functools import lru_cache
