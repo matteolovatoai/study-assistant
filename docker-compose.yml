@@ -18,12 +18,12 @@ services:
     labels:
       - "traefik.enable=true"
       # Rotta per il Backend: intercetta /study-assistant/api
-      - "traefik.http.routers.backend.rule=Host(`iris.tailbd69cc.ts.net`) && PathPrefix(`/study-assistant/api`)"
-      - "traefik.http.routers.backend.entrypoints=websecure"
-      - "traefik.http.routers.backend.tls.certresolver=tsresolver"
+      - "traefik.http.routers.study-backend.rule=Host(`iris.tailbd69cc.ts.net`) && PathPrefix(`/study-assistant/api`)"
+      - "traefik.http.routers.study-backend.entrypoints=websecure"
+      - "traefik.http.routers.study-backend.tls.certresolver=tsresolver"
       # Middleware per rimuovere '/study-assistant' prima di inviarlo a FastAPI (così FastAPI vede solo /api/...)
       - "traefik.http.middlewares.study-strip.stripprefix.prefixes=/study-assistant"
-      - "traefik.http.routers.backend.middlewares=study-strip"
+      - "traefik.http.routers.study-backend.middlewares=study-strip"
     restart: unless-stopped
 
   # ==========================================
@@ -41,9 +41,9 @@ services:
     labels:
       - "traefik.enable=true"
       # Rotta per il Frontend: intercetta tutto ciò che inizia con /study-assistant (escluso l'api che viene catturato prima)
-      - "traefik.http.routers.frontend.rule=Host(`iris.tailbd69cc.ts.net`) && PathPrefix(`/study-assistant`)"
-      - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.tls.certresolver=tsresolver"
+      - "traefik.http.routers.study-frontend.rule=Host(`iris.tailbd69cc.ts.net`) && PathPrefix(`/study-assistant`)"
+      - "traefik.http.routers.study-frontend.entrypoints=websecure"
+      - "traefik.http.routers.study-frontend.tls.certresolver=tsresolver"
     restart: unless-stopped
 
 # Diciamo a Docker Compose di non creare una nuova rete, ma di agganciarsi
