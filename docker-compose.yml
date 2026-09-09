@@ -17,10 +17,13 @@ services:
       - proxy_network
     labels:
       - "traefik.enable=true"
-      # Rotta per il Backend: risponde sul tuo dominio Tailscale MA SOLO se l'URL inizia con /api
-      - "traefik.http.routers.backend.rule=Host(`iris.tailbd69cc.ts.net`) && PathPrefix(`/api`)"
+      # Rotta per il Backend: intercetta /study-assistant/api
+      - "traefik.http.routers.backend.rule=Host(`iris.tailbd69cc.ts.net`) && PathPrefix(`/study-assistant/api`)"
       - "traefik.http.routers.backend.entrypoints=websecure"
       - "traefik.http.routers.backend.tls.certresolver=tsresolver"
+      # Middleware per rimuovere '/study-assistant' prima di inviarlo a FastAPI (così FastAPI vede solo /api/...)
+      - "traefik.http.middlewares.study-strip.stripprefix.prefixes=/study-assistant"
+      - "traefik.http.routers.backend.middlewares=study-strip"
     restart: unless-stopped
 
   # ==========================================
@@ -37,8 +40,8 @@ services:
       - proxy_network
     labels:
       - "traefik.enable=true"
-      # Rotta per il Frontend: risponde a tutto il resto sul tuo dominio
-      - "traefik.http.routers.frontend.rule=Host(`iris.tailbd69cc.ts.net`)"
+      # Rotta per il Frontend: intercetta tutto ciò che inizia con /study-assistant (escluso l'api che viene catturato prima)
+      - "traefik.http.routers.frontend.rule=Host(`iris.tailbd69cc.ts.net`) && PathPrefix(`/study-assistant`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls.certresolver=tsresolver"
     restart: unless-stopped

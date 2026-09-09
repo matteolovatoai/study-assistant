@@ -3,22 +3,12 @@ from typing import Annotated
 from config import Settings, get_settings
 from fastapi import Depends, FastAPI, File, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from rag_engine import RagEngine
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 app = FastAPI(title="RAG Backend")
-
-# Abilitiamo CORS (Cross-Origin Resource Sharing)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # In produzione andrebbe limitato al dominio del frontend
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 
 @app.exception_handler(RequestValidationError)
