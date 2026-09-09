@@ -37,8 +37,10 @@ class RagEngine:
         )
 
         # 2. Estraiamo il testo (aggiungendo il nostro type narrowing per sicurezza)
-        assert risultati["documents"] is not None
-        documenti_trovati = risultati["documents"][0]
+        documents = risultati["documents"]
+        if documents is None:
+            raise RuntimeError("ChromaDB non ha restituito i documenti attesi.")
+        documenti_trovati = documents[0]
 
         # 3. Uniamo i frammenti trovati in un unico grande testo
         contesto = "\n".join(documenti_trovati)
