@@ -32,7 +32,7 @@
 ## 📅 Sprint 5: Refactoring e Stabilizzazione (Tech Debt) - *Sprint Attuale*
 - [x] Inserimento di `pydantic-settings` per la gestione centralizzata della configurazione (rimozione variabili hardcoddate).
 - [x] Refactoring di `rag_engine.py` e `main.py` per rimuovere lo stato globale (client ChromaDB e Gemini) e usare la Dependency Injection di FastAPI (`Depends`).
-- [ ] Riscrittura completa dei test in ottica E2E / Vertical Slicing, sfruttando i `dependency_overrides`.
+- [x] Riscrittura completa dei test in ottica E2E / Vertical Slicing, sfruttando i `dependency_overrides`.
 - [ ] Gestione centralizzata degli errori in FastAPI (Exception Handlers).
 - [ ] **Infrastruttura**: Configurare Traefik nel `docker-compose.yml` per usare un sottodominio dedicato (es. `study.tuo-raspberry.ts.net`) e valutare rimozione CORS con rewrite in Next.js.
 
