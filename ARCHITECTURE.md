@@ -7,7 +7,8 @@ Il progetto è un sistema RAG (Retrieval-Augmented Generation) locale e modulare
 ### Backend (Microservizio API)
 - **Linguaggio:** Python 3.12+
 - **Framework Web:** FastAPI (basato su Starlette e Pydantic).
-- **Tool di Testing:** Pytest
+- **Gestione Configurazione:** `pydantic-settings` per la gestione tipizzata e centralizzata dell'ambiente (environment variables).
+- **Tool di Testing:** Pytest (approccio architetturale basato su Vertical Slicing per i test E2E con override della Dependency Injection).
 - **Integrazione AI (Generazione Testo):** `google-genai` SDK (usando il modello `gemini-3.1-flash-lite` per massima velocità e minor costo).
 - **Database Vettoriale:** ChromaDB (modalità in-memory persistente su disco).
 - **Integrazione AI (Embeddings):** Funzione integrata in ChromaDB `GoogleGeminiEmbeddingFunction` (utilizzando il modello `gemini-embedding-001`).
