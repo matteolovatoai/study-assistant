@@ -17,7 +17,7 @@ class MockRagEngine:
         # Salvataggio finto in memoria
         self.memory.extend(chunks)
 
-    def generate_ai_response(self, prompt: str) -> str:
+    def generate_ai_response(self, prompt: str, history=None) -> str:
         # Risposta fittizia controllabile
         return "Risposta generata dal mock RAG!"
 
@@ -61,7 +61,10 @@ def test_upload_document_e2e():
 
 def test_chat_real_e2e():
     """Testa l'endpoint chat verificando che restituisca la risposta del mock."""
-    payload = {"message": "Di che colore e' il cielo?"}
+    payload = {
+        "message": "Di che colore e' il cielo?",
+        "session_id": "test_session_123",
+    }
     response = client.post("/api/chat", json=payload)
 
     assert response.status_code == 200

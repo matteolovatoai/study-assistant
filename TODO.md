@@ -38,6 +38,6 @@
 
 ## 📅 Sprint 6: Evoluzione MVP (Migliorie)
 - [x] Supporto all'upload di documenti complessi (PDF, Docx).
-- [ ] Cronologia Chat (memoria per domande "follow-up").
+- [x] Cronologia Chat (memoria per domande "follow-up").
 - [ ] UI/UX: Loader (Spinner) mentre Gemini "sta pensando".
 - [ ] UI/UX: Supporto formattazione Markdown nelle risposte dell'AI.

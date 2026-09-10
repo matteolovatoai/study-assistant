@@ -22,6 +22,12 @@ export default function ChatPage() {
   // useRef ci permette di avere un "telecomando" per cliccare l'input nascosto
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null); // Aggiunto per lo scroll
+  
+  // Generiamo un session_id univoco al primo caricamento per la cronologia chat
+  const sessionIdRef = useRef<string>("");
+  if (!sessionIdRef.current) {
+    sessionIdRef.current = "session-" + Math.random().toString(36).substring(2, 10);
+  }
 
   // Scrolla in basso automaticamente ogni volta che cambia l'array messages
   useEffect(() => {
@@ -43,7 +49,10 @@ export default function ChatPage() {
       const response = await fetch(`${apiUrl}/study-assistant/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: userText }),
+        body: JSON.stringify({ 
+          message: userText,
+          session_id: sessionIdRef.current 
+        }),
       });
 
       if (!response.ok) throw new Error("Errore dal server FastAPI");

@@ -1,5 +1,6 @@
 from typing import Annotated
 
+from chat_history import ChatHistory
 from config import Settings, get_settings
 from fastapi import Depends, FastAPI, File, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
@@ -9,6 +10,7 @@ from rag_engine import RagEngine
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 app = FastAPI(title="RAG Backend")
+chat_db = ChatHistory()
 
 
 @app.exception_handler(RequestValidationError)
@@ -49,6 +51,7 @@ def get_rag_engine(settings: Annotated[Settings, Depends(get_settings)]) -> RagE
 
 class ChatRequest(BaseModel):
     message: str
+    session_id: str = "default_session"
 
 
 @app.get("/health")
@@ -58,7 +61,10 @@ def health_check():
 
 @app.post("/api/chat")
 def chat(request: ChatRequest, engine: Annotated[RagEngine, Depends(get_rag_engine)]):
-    response: str = engine.generate_ai_response(request.message)
+    storico = chat_db.get_messages(request.session_id)
+    response: str = engine.generate_ai_response(request.message, storico)
+    chat_db.add_message(request.session_id, "user", request.message)
+    chat_db.add_message(request.session_id, "ai", response)
     return {"reply": response}
 
 
