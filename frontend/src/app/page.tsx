@@ -8,6 +8,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Paperclip, Loader2 } from "lucide-react"; // Icone da lucide-react
 import ReactMarkdown from "react-markdown"; // Per il rendering del markdown
 
+import remarkGfm from "remark-gfm"; // Supporto tabelle e GFM
+
 type Message = {
   role: "user" | "ai";
   content: string;
@@ -129,7 +131,7 @@ export default function ChatPage() {
                       : "bg-zinc-100 text-black self-start mr-auto"
                   }`}
                 >
-                  {msg.role === "ai" ? <div className="prose prose-sm max-w-none"><ReactMarkdown>{msg.content}</ReactMarkdown></div> : msg.content}
+                  {msg.role === "ai" ? <div className="prose prose-sm max-w-none"><ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown></div> : msg.content}
                 </div>
               ))}
               {isTyping && (
