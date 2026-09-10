@@ -1,11 +1,13 @@
 import os
 import uuid
+from io import BytesIO
 
 import chromadb
 from chromadb.utils import embedding_functions
 from config import Settings
 from google import genai
 from google.genai import errors
+from pypdf import PdfReader
 
 
 class RagEngine:
@@ -75,3 +77,21 @@ class RagEngine:
         """Salva i chunk in ChromaDB con un ID univoco"""
         ids = [f"{filename}_{uuid.uuid4()}" for _ in chunks]
         self.collection.add(ids=ids, documents=chunks)
+
+    @staticmethod
+    def extract_text(file_bytes: bytes, file_name: str) -> str:
+        """Estrae il testo da un file PDF o DOCX o TXT"""
+        if file_name.endswith(".pdf"):
+            reader = PdfReader(BytesIO(file_bytes))
+            text = "\n".join(page.extract_text() for page in reader.pages)
+            return text
+        elif file_name.endswith(".docx"):
+            from docx import Document
+
+            document = Document(BytesIO(file_bytes))
+            text = "\n".join(paragraph.text for paragraph in document.paragraphs)
+            return text
+        elif file_name.endswith(".txt"):
+            return file_bytes.decode("utf-8")
+        else:
+            raise ValueError("Formato di file non supportato. Usa PDF, DOCX o TXT.")

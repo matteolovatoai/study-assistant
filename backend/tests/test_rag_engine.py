@@ -86,3 +86,24 @@ def test_store_and_query_chunks(test_engine, monkeypatch):
     # perché l'embedding function finta usata da Chroma potrebbe non essere accurata senza API key.
     response_text = test_engine.generate_ai_response("Di che colore e' il prato?")
     assert "verde" in response_text
+
+
+@pytest.mark.parametrize("extension", ["pdf", "docx", "txt"])
+def test_extract_text_from_file(extension):
+    """Verifica che il testo venga estratto correttamente dai vari formati usando i byte"""
+    from pathlib import Path
+
+    file_path = Path(f"tests/test_data/dummy.{extension}").resolve()
+
+    # Leggiamo il file come farebbe FastAPI (bytes in memoria)
+    file_bytes = file_path.read_bytes()
+    filename = f"dummy.{extension}"
+
+    # Chiamiamo la funzione (che possiamo definire come @staticmethod)
+    extracted_text = RagEngine.extract_text(file_bytes, filename)
+
+    assert isinstance(extracted_text, str)
+    assert len(extracted_text) > 0
+    assert "questo e un" in extracted_text.lower()
+    # Verifica anche che estragga la stringa corretta in base al tipo
+    assert extension in extracted_text.lower()
