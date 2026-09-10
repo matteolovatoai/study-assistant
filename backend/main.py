@@ -69,15 +69,16 @@ async def upload(
 ):
     # 1. Leggiamo fisicamente il contenuto del file .txt
     content = await file.read()
-    text = content.decode("utf-8")
+    filename = file.filename or "unknown.txt"
+    text = engine.extract_text(file_bytes=content, file_name=filename)
 
     # 2. Lo spezzettiamo tramite la nostra funzione in rag_engine
     chunks = engine.chunk_text(text)
 
     # 3. Lo salviamo nel database ChromaDB!
-    engine.store_chunks(chunks, file.filename or "sconosciuto")
+    engine.store_chunks(chunks, filename=filename)
 
     return {
-        "filename": file.filename,
+        "filename": filename,
         "message": f"Caricati {len(chunks)} frammenti nel RAG!",
     }

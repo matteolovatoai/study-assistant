@@ -130,7 +130,7 @@ export default function ChatPage() {
             {/* Input file Nascosto */}
             <input 
               type="file" 
-              accept=".txt" 
+              accept=".txt,.pdf,.docx" 
               className="hidden" 
               ref={fileInputRef}
               onChange={handleFileUpload}
@@ -142,7 +142,7 @@ export default function ChatPage() {
               size="icon" 
               onClick={() => fileInputRef.current?.click()}
               disabled={isUploading}
-              title="Allega un file di testo (.txt)"
+              title="Allega un documento (.txt, .pdf, .docx)"
             >
               {isUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Paperclip className="h-4 w-4" />}
             </Button>

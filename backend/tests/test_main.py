@@ -1,8 +1,11 @@
 from fastapi.testclient import TestClient
 from main import app, get_rag_engine
+from rag_engine import RagEngine
 
 
 class MockRagEngine:
+    extract_text = staticmethod(RagEngine.extract_text)
+
     def __init__(self):
         self.memory = []
 
@@ -65,3 +68,40 @@ def test_chat_real_e2e():
     data = response.json()
     assert "reply" in data
     assert data["reply"] == "Risposta generata dal mock RAG!"
+
+
+from pathlib import Path
+
+import pytest
+
+
+@pytest.mark.parametrize(
+    "extension, mime_type",
+    [
+        ("pdf", "application/pdf"),
+        (
+            "docx",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        ),
+        ("txt", "text/plain"),
+    ],
+)
+def test_upload_complex_documents(extension, mime_type):
+    """Testa l'upload di file pdf, docx e txt via API"""
+    file_path = Path(f"tests/test_data/dummy.{extension}")
+    file_bytes = file_path.read_bytes()
+    filename = file_path.name
+
+    files = {"file": (filename, file_bytes, mime_type)}
+
+    # Puliamo la memoria del mock prima del test per sicurezza
+    mock_engine.memory.clear()
+
+    response = client.post("/api/upload", files=files)
+
+    assert response.status_code == 200
+    data = response.json()
+    assert data["filename"] == filename
+
+    assert len(mock_engine.memory) > 0
+    assert "Questo e un" in mock_engine.memory[0]

@@ -37,7 +37,7 @@
 - [x] **Infrastruttura**: Configurare Traefik nel `docker-compose.yml` per usare un sottodominio dedicato (es. `study.tuo-raspberry.ts.net`) e valutare rimozione CORS con rewrite in Next.js.
 
 ## 📅 Sprint 6: Evoluzione MVP (Migliorie)
-- [ ] Supporto all'upload di documenti complessi (PDF, Docx).
+- [x] Supporto all'upload di documenti complessi (PDF, Docx).
 - [ ] Cronologia Chat (memoria per domande "follow-up").
 - [ ] UI/UX: Loader (Spinner) mentre Gemini "sta pensando".
 - [ ] UI/UX: Supporto formattazione Markdown nelle risposte dell'AI.
