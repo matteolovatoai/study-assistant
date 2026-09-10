@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Paperclip, Loader2 } from "lucide-react"; // Icone da lucide-react
+import ReactMarkdown from "react-markdown"; // Per il rendering del markdown
 
 type Message = {
   role: "user" | "ai";
@@ -128,7 +129,7 @@ export default function ChatPage() {
                       : "bg-zinc-100 text-black self-start mr-auto"
                   }`}
                 >
-                  {msg.content}
+                  {msg.role === "ai" ? <ReactMarkdown>{msg.content}</ReactMarkdown> : msg.content}
                 </div>
               ))}
               {isTyping && (
