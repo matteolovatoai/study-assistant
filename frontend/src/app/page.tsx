@@ -129,7 +129,7 @@ export default function ChatPage() {
                       : "bg-zinc-100 text-black self-start mr-auto"
                   }`}
                 >
-                  {msg.role === "ai" ? <ReactMarkdown>{msg.content}</ReactMarkdown> : msg.content}
+                  {msg.role === "ai" ? <div className="prose prose-sm max-w-none"><ReactMarkdown>{msg.content}</ReactMarkdown></div> : msg.content}
                 </div>
               ))}
               {isTyping && (
