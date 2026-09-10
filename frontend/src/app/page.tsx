@@ -18,7 +18,7 @@ export default function ChatPage() {
   ]);
   const [inputValue, setInputValue] = useState("");
   const [isUploading, setIsUploading] = useState(false); // Stato per il caricamento in corso
-  
+  const [isTyping, setIsTyping] = useState(false); // Stato per l'animazione di digitazione dell'AI
   // useRef ci permette di avere un "telecomando" per cliccare l'input nascosto
   const fileInputRef = useRef<HTMLInputElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null); // Aggiunto per lo scroll
@@ -43,7 +43,7 @@ export default function ChatPage() {
     setMessages((prev) => [...prev, newUserMessage]);
     
     setInputValue("");
-
+    setIsTyping(true);
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
       const response = await fetch(`${apiUrl}/study-assistant/api/chat`, {
@@ -65,6 +65,9 @@ export default function ChatPage() {
     } catch (error) {
       console.error("Errore fetch:", error);
       setMessages((prev) => [...prev, { role: "ai", content: "⚠️ Si è verificato un errore di rete." }]);
+    }
+    finally {
+      setIsTyping(false);
     }
   };
 
@@ -128,6 +131,12 @@ export default function ChatPage() {
                   {msg.content}
                 </div>
               ))}
+              {isTyping && (
+                <div className="p-3 rounded-lg max-w-[80%] bg-zinc-100 text-black self-start mr-auto flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin text-zinc-500" />
+                  <span className="text-zinc-500 text-sm">Gemini sta pensando...</span>
+                </div>
+              )}
               {/* Ancora invisibile su cui fare lo scroll */}
               <div ref={messagesEndRef} />
             </div>
@@ -143,6 +152,7 @@ export default function ChatPage() {
               className="hidden" 
               ref={fileInputRef}
               onChange={handleFileUpload}
+              disabled={isUploading || isTyping}
             />
             
             {/* Bottone Graffetta per Upload */}
@@ -150,7 +160,7 @@ export default function ChatPage() {
               variant="outline" 
               size="icon" 
               onClick={() => fileInputRef.current?.click()}
-              disabled={isUploading}
+              disabled={isUploading || isTyping}
               title="Allega un documento (.txt, .pdf, .docx)"
             >
               {isUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Paperclip className="h-4 w-4" />}
