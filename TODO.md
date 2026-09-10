@@ -40,4 +40,4 @@
 - [x] Supporto all'upload di documenti complessi (PDF, Docx).
 - [x] Cronologia Chat (memoria per domande "follow-up").
 - [x] UI/UX: Loader (Spinner) mentre Gemini "sta pensando".
-- [ ] UI/UX: Supporto formattazione Markdown nelle risposte dell'AI.
+- [x] UI/UX: Supporto formattazione Markdown nelle risposte dell'AI.
