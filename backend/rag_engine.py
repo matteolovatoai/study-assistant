@@ -31,7 +31,9 @@ class RagEngine:
             embedding_function=self.google_ef,  # type: ignore
         )
 
-    def generate_ai_response(self, prompt: str) -> str:
+    def generate_ai_response(
+        self, prompt: str, history: list[dict] | None = None
+    ) -> str:
         # 1. Cerchiamo nel database i pezzetti di documento relativi alla domanda
         risultati = self.collection.query(
             query_texts=[prompt],
@@ -46,6 +48,11 @@ class RagEngine:
 
         # 3. Uniamo i frammenti trovati in un unico grande testo
         contesto = "\n".join(documenti_trovati)
+        history_messages = ""
+        if history is not None:
+            history_messages = "CRONOLOGIA DELLA CONVERSAZIONE:\n"
+            for msg in history:
+                history_messages += f"{msg['role'].upper()}: {msg['message']}\n"
 
         # 4. Creiamo il super-prompt (RAG = Retrieval-Augmented Generation)
         prompt_aumentato = f"""
@@ -55,7 +62,7 @@ class RagEngine:
 
             CONTESTO:
             {contesto}
-
+            {history_messages}
             DOMANDA: {prompt}
             """
 
