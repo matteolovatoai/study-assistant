@@ -1,43 +1,30 @@
 # Roadmap e Sprint
 
-## ✅ Sprint 1: Setup Backend e Integrazione AI
-- [x] Inizializzazione progetto (`uv venv`, `pytest.ini`, `.gitignore`).
-- [x] Scrittura test TDD per endpoint base.
-- [x] Creazione `main.py` con FastAPI (endpoint `/health`, mock `/api/chat`).
-- [x] Test integrazione API di Google Gemini tramite `.env`.
-- [x] Creazione `rag_engine.py` e integrazione con il modello `gemini-3.1-flash-lite`.
-- [x] Collegamento finale tra `main.py` e `rag_engine.py`.
+## ✅ Sprint Completati (1-5)
+- Inizializzazione progetto (`uv`, Next.js, FastAPI, Docker, Traefik).
+- Implementazione RAG base con ChromaDB e Gemini API.
+- Gestione configurazione con `pydantic-settings` e Dependency Injection (`Depends`).
+- Test E2E con override delle dipendenze.
+- Integrazione SQLite per la gestione della memoria delle chat.
 
-## ✅ Sprint 2: Database Vettoriale e RAG
-- [x] Installazione ChromaDB e python-multipart.
-- [x] TDD: Test per l'endpoint `/api/upload` (caricamento file di testo).
-- [x] Implementazione `/api/upload` in FastAPI (`main.py`) usando `Annotated`.
-- [x] `rag_engine.py`: Funzione per spezzettare (chunking) il documento.
-- [x] `rag_engine.py`: Inizializzazione di ChromaDB e salvataggio dei vettori (usando `GoogleGeminiEmbeddingFunction` e `gemini-embedding-001`).
-- [x] Modifica `/api/chat`: Cercare il contesto in ChromaDB prima di chiamare Gemini.
-
-## ✅ Sprint 3: Interfaccia Utente (Next.js)
-- [x] Inizializzazione progetto Next.js (separato dal backend).
-- [x] Creazione UI per la chat (gestione stato dei messaggi).
-- [x] Creazione UI per caricare un documento (`<input type="file">`).
-- [x] Collegamento delle chiamate `fetch` tra Frontend e Backend.
-- [x] Gestione del CORS in FastAPI per permettere le chiamate.
-
-## ✅ Sprint 4: Dockerizzazione e Deployment (Raspberry Pi 5)
-- [x] Creazione `Dockerfile` per backend e frontend (con fix node24).
-- [x] Configurazione `docker-compose.yml` (multi-stage per frontend).
-- [x] Regole di Traefik per il reverse proxy globale su Tailscale.
-- [x] Gestione intelligente delle Environment Variables (NEXT_PUBLIC_API_URL).
-
-## 📅 Sprint 5: Refactoring e Stabilizzazione (Tech Debt) - *Sprint Attuale*
-- [x] Inserimento di `pydantic-settings` per la gestione centralizzata della configurazione (rimozione variabili hardcoddate).
-- [x] Refactoring di `rag_engine.py` e `main.py` per rimuovere lo stato globale (client ChromaDB e Gemini) e usare la Dependency Injection di FastAPI (`Depends`).
-- [x] Riscrittura completa dei test in ottica E2E / Vertical Slicing, sfruttando i `dependency_overrides`.
-- [x] Gestione centralizzata degli errori in FastAPI (Exception Handlers).
-- [x] **Infrastruttura**: Configurare Traefik nel `docker-compose.yml` per usare un sottodominio dedicato (es. `study.tuo-raspberry.ts.net`) e valutare rimozione CORS con rewrite in Next.js.
-
-## 📅 Sprint 6: Evoluzione MVP (Migliorie)
-- [x] Supporto all'upload di documenti complessi (PDF, Docx).
-- [x] Cronologia Chat (memoria per domande "follow-up").
+## ✅ Sprint 6: Evoluzione MVP (Migliorie)
+- [x] Cronologia Chat (integrazione base con SQLite).
 - [x] UI/UX: Loader (Spinner) mentre Gemini "sta pensando".
 - [x] UI/UX: Supporto formattazione Markdown nelle risposte dell'AI.
+- [x] Abbandono supporto `.docx` (YAGNI) per concentrarsi sull'ingestione avanzata dei PDF.
+
+## 📅 Sprint 7: Ingestione PDF Avanzata (Multimodale & Pulizia) - *Sprint Attuale*
+- [ ] **Pulizia Testo:** Implementare logica per ignorare header, footer, nomi dei docenti e loghi ricorrenti in ogni slide.
+- [ ] **Deduplicazione Slide Animate:** Rilevare e unire le slide con stile "animazione" (dove il testo si aggiunge progressivamente) conservando solo la slide finale completa.
+- [ ] **Estrazione Multimodale:** Sfruttare modelli visuali (es. `gemini-flash` multimodale) o parser avanzati per estrarre il contesto reale da tabelle, grafici e liste presenti nei PDF.
+- [ ] **Chunking Semantico:** Suddividere il documento in base al significato logico (es. per singola slide completa) invece che per numero di caratteri.
+
+## 📅 Sprint 8: Gestione Multi-Chat (Frontend & Backend)
+- [ ] **Backend:** Esporre endpoint CRUD (Creazione, Lettura, Aggiornamento, Cancellazione) per le sessioni di chat (es. `/api/chats`, `/api/chats/{id}/messages`).
+- [ ] **Frontend:** Creare una Sidebar per la navigazione tra le diverse sessioni di chat.
+- [ ] **Frontend:** Integrare lo stato delle conversazioni con le API multi-chat.
+
+## 📅 Sprint 9: Ottimizzazioni e Deploy Finale
+- [ ] Supporto Streaming per le risposte dell'AI (SSE).
+- [ ] Limiti risorse Docker (RAM/CPU) per la stabilità su Raspberry Pi.
+- [ ] Setup di uno script per il backup automatico del database SQLite e dei vettori ChromaDB.

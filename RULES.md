@@ -3,7 +3,7 @@
 Questo file definisce i principi fondamentali e le regole di sviluppo per il progetto.
 
 ## 1. Principi Architetturali
-- **YAGNI (You Aren't Gonna Need It):** Non implementare funzionalità o astrazioni finché non sono strettamente necessarie. Parti sempre dalla soluzione più semplice e funzionante. Niente over-engineering.
+- **YAGNI (You Aren't Gonna Need It):** Non implementare funzionalità o astrazioni finché non sono strettamente necessarie. Parti sempre dalla soluzione più semplice e funzionante. Niente over-engineering. Esempio pratico: limitare l'ingestione al solo formato `.pdf`, scartando `.docx` o altri finché non ci sarà una reale necessità per l'utente finale.
 - **Separation of Concerns (SoC):** Il codice API (FastAPI) e la logica di business/AI (`rag_engine.py`) devono essere strettamente separati e non intrecciati.
 
 ## 2. Metodologia di Lavoro
@@ -20,5 +20,5 @@ Questo file definisce i principi fondamentali e le regole di sviluppo per il pro
 - L'AI non deve scrivere passivamente tonnellate di codice al posto dell'utente, ma deve proporre test, spiegare il "perché" dietro alle scelte (es. l'uso di specifici SDK) e sfidare l'utente a implementare i componenti (con supporto e correzioni al bisogno).
 
 ## 4. Gestione delle Dipendenze
-- **Strictly No Copyleft:** Sono ammesse **esclusivamente** librerie con licenze permissive (MIT, Apache 2.0, BSD). Qualsiasi libreria sotto licenza GPL, AGPL o simili è severamente vietata per mantenere il progetto libero da vincoli di rilascio open source forzato.
+- **Strictly No Copyleft:** Sono ammesse **esclusivamente** librerie con licenze permissive (MIT, Apache 2.0, BSD). Qualsiasi libreria sotto licenza GPL, AGPL o simili è severamente vietata per mantenere il progetto libero da vincoli di rilascio open source forzato. Particolare attenzione andrà data alle librerie di manipolazione PDF.
 - **Gestore di Pacchetti:** Si utilizza `uv` (invece del classico `pip`) per la massima velocità e gestione riproducibile degli ambienti virtuali Python.
