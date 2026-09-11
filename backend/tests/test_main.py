@@ -82,15 +82,11 @@ import pytest
     "extension, mime_type",
     [
         ("pdf", "application/pdf"),
-        (
-            "docx",
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        ),
         ("txt", "text/plain"),
     ],
 )
 def test_upload_complex_documents(extension, mime_type):
-    """Testa l'upload di file pdf, docx e txt via API"""
+    """Testa l'upload di file pdf e txt via API"""
     file_path = Path(f"tests/test_data/dummy.{extension}")
     file_bytes = file_path.read_bytes()
     filename = file_path.name

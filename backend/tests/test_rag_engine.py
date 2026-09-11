@@ -88,7 +88,7 @@ def test_store_and_query_chunks(test_engine, monkeypatch):
     assert "verde" in response_text
 
 
-@pytest.mark.parametrize("extension", ["pdf", "docx", "txt"])
+@pytest.mark.parametrize("extension", ["pdf", "txt"])
 def test_extract_text_from_file(extension):
     """Verifica che il testo venga estratto correttamente dai vari formati usando i byte"""
     from pathlib import Path

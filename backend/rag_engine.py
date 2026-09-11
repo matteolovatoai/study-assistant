@@ -87,16 +87,10 @@ class RagEngine:
 
     @staticmethod
     def extract_text(file_bytes: bytes, file_name: str) -> str:
-        """Estrae il testo da un file PDF o DOCX o TXT"""
+        """Estrae il testo da un file PDF o TXT"""
         if file_name.endswith(".pdf"):
             reader = PdfReader(BytesIO(file_bytes))
             text = "\n".join(page.extract_text() for page in reader.pages)
-            return text
-        elif file_name.endswith(".docx"):
-            from docx import Document
-
-            document = Document(BytesIO(file_bytes))
-            text = "\n".join(paragraph.text for paragraph in document.paragraphs)
             return text
         elif file_name.endswith(".txt"):
             return file_bytes.decode("utf-8")
