@@ -89,9 +89,21 @@ def test_store_and_query_chunks(test_engine, monkeypatch):
 
 
 @pytest.mark.parametrize("extension", ["pdf", "txt"])
-def test_extract_text_from_file(extension):
+def test_extract_text_from_file(extension, test_engine, monkeypatch):
     """Verifica che il testo venga estratto correttamente dai vari formati usando i byte"""
     from pathlib import Path
+
+    # Mock della risposta di Gemini per i PDF
+    class MockResponse:
+        text = f"Questo e un {extension} mockato da Gemini."
+
+    def mock_generate_content(*args, **kwargs):
+        return MockResponse()
+
+    # Intercettiamo la chiamata a Gemini per l'estrazione PDF
+    monkeypatch.setattr(
+        test_engine.client.models, "generate_content", mock_generate_content
+    )
 
     file_path = Path(f"tests/test_data/dummy.{extension}").resolve()
 
@@ -99,11 +111,10 @@ def test_extract_text_from_file(extension):
     file_bytes = file_path.read_bytes()
     filename = f"dummy.{extension}"
 
-    # Chiamiamo la funzione (che possiamo definire come @staticmethod)
-    extracted_text = RagEngine.extract_text(file_bytes, filename)
+    # Chiamiamo la funzione (ora d'istanza)
+    extracted_text = test_engine.extract_text(file_bytes, filename)
 
     assert isinstance(extracted_text, str)
     assert len(extracted_text) > 0
     assert "questo e un" in extracted_text.lower()
-    # Verifica anche che estragga la stringa corretta in base al tipo
     assert extension in extracted_text.lower()

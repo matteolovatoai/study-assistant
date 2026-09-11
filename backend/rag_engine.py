@@ -1,13 +1,12 @@
 import os
 import uuid
-from io import BytesIO
 
 import chromadb
+import pypdfium2 as pdfium
 from chromadb.utils import embedding_functions
 from config import Settings
 from google import genai
 from google.genai import errors
-from pypdf import PdfReader
 
 
 class RagEngine:
@@ -85,14 +84,51 @@ class RagEngine:
         ids = [f"{filename}_{uuid.uuid4()}" for _ in chunks]
         self.collection.add(ids=ids, documents=chunks)
 
-    @staticmethod
-    def extract_text(file_bytes: bytes, file_name: str) -> str:
-        """Estrae il testo da un file PDF o TXT"""
+    def extract_text(self, file_bytes: bytes, file_name: str) -> str:
+        """Estrae il testo da un file PDF (usando Gemini Vision) o TXT"""
         if file_name.endswith(".pdf"):
-            reader = PdfReader(BytesIO(file_bytes))
-            text = "\n".join(page.extract_text() for page in reader.pages)
-            return text
+            import typing
+            from itertools import batched
+
+            pdf = pdfium.PdfDocument(file_bytes)
+            all_text = []
+
+            # Batch di 10 immagini per chiamata per rispettare i Rate Limits
+            for batch_index, page_batch in enumerate(batched(pdf, 10), start=1):
+                batch_images: list[typing.Any] = []
+                for page in page_batch:
+                    pil_image = page.render(scale=2).to_pil()
+                    batch_images.append(pil_image)
+
+                prompt = (
+                    f"Ti sto fornendo {len(batch_images)} slide/pagine consecutive di un documento PDF. "
+                    "Per ogni immagine, estrai tutto il testo educativo in formato Markdown. "
+                    "Ignora numeri di pagina, loghi ripetitivi e intestazioni ricorrenti. "
+                    "Se ci sono grafici o tabelle, descrivili in modo chiaro. "
+                    "Separa chiaramente il contenuto di ogni pagina."
+                )
+
+                contents: list[typing.Any] = [prompt]
+                contents.extend(batch_images)
+
+                try:
+                    response = self.client.models.generate_content(
+                        model=self.settings.GEMINI_MODEL,
+                        contents=contents,  # type: ignore
+                    )
+                    if response.text:
+                        all_text.append(response.text.strip())
+                except errors.APIError as e:
+                    print(
+                        f"Errore API durante l'estrazione multimodale del batch {batch_index}: {e}"
+                    )
+                except ValueError as e:
+                    print(
+                        f"Errore di validazione durante l'estrazione multimodale del batch {batch_index}: {e}"
+                    )
+
+            return "\n\n".join(all_text)
         elif file_name.endswith(".txt"):
             return file_bytes.decode("utf-8")
         else:
-            raise ValueError("Formato di file non supportato. Usa PDF, DOCX o TXT.")
+            raise ValueError("Formato di file non supportato. Usa PDF o TXT.")

@@ -9,7 +9,19 @@ from pydantic import BaseModel
 from rag_engine import RagEngine
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI(title="RAG Backend")
+
+# Aggiungiamo i CORS per permettere al frontend locale (localhost:3000) di comunicare col backend (8000)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # In sviluppo va bene tutto
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 chat_db = ChatHistory()
 
 
