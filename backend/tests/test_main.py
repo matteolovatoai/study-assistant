@@ -1,10 +1,14 @@
 from fastapi.testclient import TestClient
 from main import app, get_rag_engine
-from rag_engine import RagEngine
 
 
 class MockRagEngine:
-    extract_text = staticmethod(RagEngine.extract_text)
+    def extract_text(self, file_bytes: bytes, file_name: str) -> str:
+        if file_name.endswith(".pdf"):
+            return "Questo e un testo mockato da pdf"
+        elif file_name.endswith(".txt"):
+            return file_bytes.decode("utf-8")
+        return ""
 
     def __init__(self):
         self.memory = []

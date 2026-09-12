@@ -48,8 +48,7 @@ export default function ChatPage() {
     setInputValue("");
     setIsTyping(true);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
-      const response = await fetch(`${apiUrl}/study-assistant/api/chat`, {
+      const response = await fetch(`/study-assistant/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -85,9 +84,8 @@ export default function ChatPage() {
     formData.append("file", file);
 
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
       // Mandiamo il file al backend
-      const response = await fetch(`${apiUrl}/study-assistant/api/upload`, {
+      const response = await fetch(`/study-assistant/api/upload`, {
         method: "POST",
         // ATTENZIONE: Non impostare i Content-Type! 
         // Il browser lo calcola in automatico per FormData aggiungendo il "boundary" corretto
