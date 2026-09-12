@@ -105,6 +105,9 @@ class RagEngine:
                     "Per ogni immagine, estrai tutto il testo educativo in formato Markdown. "
                     "Ignora numeri di pagina, loghi ripetitivi e intestazioni ricorrenti. "
                     "Se ci sono grafici o tabelle, descrivili in modo chiaro. "
+                    "REGOLE TASSATIVE PER IL CODICE: Se vedi degli snippet di codice sorgente (es. Python, SQL, Java), "
+                    "NON descriverli a parole. Devi trascriverli e ricopiarli ESATTAMENTE riga per riga, "
+                    "mantenendo l'indentazione originale e racchiudendoli nei classici blocchi di codice Markdown (```). "
                     "Separa chiaramente il contenuto di ogni pagina."
                 )
 
